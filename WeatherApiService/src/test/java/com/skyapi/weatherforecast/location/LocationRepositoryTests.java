@@ -2,6 +2,8 @@ package com.skyapi.weatherforecast.location;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -33,5 +35,16 @@ public class LocationRepositoryTests {
 		
 		assertThat(savedLocation).isNotNull();
 		assertThat(savedLocation.getCode()).isEqualTo("NYC_USA");
+	}
+	
+	@Test
+	public void testListSuccess() {
+		List<Location> locations = repository.findUntrased();
+		
+		assertThat(locations).isNotEmpty();
+		
+		locations.forEach(System.out::println);
+		
+		
 	}
 }
