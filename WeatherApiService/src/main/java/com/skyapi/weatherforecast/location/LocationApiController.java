@@ -100,6 +100,9 @@ public class LocationApiController {
 	}
 	
 	@DeleteMapping("/{code}")
+    @ApiResponses(value = {
+    		 @ApiResponse(responseCode = "204", description = "No content available"), 
+        })
 	public ResponseEntity<?> deleteLocation(@PathVariable("code") String code){
 		try {
 			service.delete(code);
