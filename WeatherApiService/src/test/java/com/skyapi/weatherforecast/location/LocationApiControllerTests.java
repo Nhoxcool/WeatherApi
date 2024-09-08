@@ -1,6 +1,7 @@
 package com.skyapi.weatherforecast.location;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -34,6 +35,8 @@ public class LocationApiControllerTests {
 	
 	@MockBean LocationService service;
 	
+	
+	//Post
 	
 	@Test
 	public void testAddShouldReturn400BadRequest() throws Exception {
@@ -76,6 +79,8 @@ public class LocationApiControllerTests {
 	}
 
 	
+	// Get All
+	
 	@Test
 	public void testListShouldReturn204NoContent() throws Exception {
 		Mockito.when(service.list()).thenReturn(Collections.emptyList());
@@ -115,6 +120,8 @@ public class LocationApiControllerTests {
 			   .andDo(print());
 	}
 	
+	
+	//Get Location
 	
 	@Test
 	public void testGetShouldReturn405MethodNotAllowed() throws Exception {
@@ -157,6 +164,8 @@ public class LocationApiControllerTests {
 			   .andDo(print());
 	}
 	
+	
+	//Test Update
 	
 	@Test
 	public void testUpdateShouldReturn404NotFound() throws Exception {
@@ -224,6 +233,32 @@ public class LocationApiControllerTests {
 				.andExpect(jsonPath("$.code", is("NYC_USA")))
 				.andExpect(jsonPath("$.city_name", is("New York City")))
 				.andDo(print());
+	}
+	
+	//Test Delete
+	
+	@Test
+	public void testDeleteShouldReturn404NotFound() throws Exception{
+		String code = "LACA_USA";
+		String requestURI = END_POINT_PATH + "/" + code;
+		
+		Mockito.doThrow(LocationNotFoundException.class).when(service).delete(code);
+		
+		mockMvc.perform(delete(requestURI))
+			   .andExpect(status().isNotFound())
+			   .andDo(print());
+	}
+	
+	@Test
+	public void testDeleteShouldReturn204NoContent() throws Exception {
+		String code = "LACA_USA";
+		String requestURI = END_POINT_PATH + "/" + code;
+		
+		Mockito.doNothing().when(service).delete(code);
+		
+		mockMvc.perform(delete(requestURI))
+			   .andExpect(status().isNoContent())
+			   .andDo(print());
 	}
 	
 	
