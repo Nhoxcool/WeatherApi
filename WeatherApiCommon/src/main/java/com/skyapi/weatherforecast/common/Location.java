@@ -7,9 +7,12 @@ import org.hibernate.validator.constraints.Length;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -51,6 +54,23 @@ public class Location {
 	//for delete method
 	@JsonIgnore
 	private boolean trashed;
+	
+	// One to One with realtimeWeather Table
+	@OneToOne(mappedBy = "location", cascade = CascadeType.ALL)
+	@PrimaryKeyJoinColumn
+	private RealtimeWeather realtimeWeather;
+
+	public Location() {
+		
+	}
+	
+	public Location(String cityName, String regionName, String countryName, String countryCode) {
+		super();
+		this.cityName = cityName;
+		this.regionName = regionName;
+		this.countryName = countryName;
+		this.countryCode = countryCode;
+	}
 
 	public String getCode() {
 		return code;
@@ -130,7 +150,13 @@ public class Location {
 		return "Location [code=" + code + ", cityName=" + cityName + ", regionName=" + regionName + ", countryName="
 				+ countryName + ", countryCode=" + countryCode + ", enabled=" + enabled + ", trashed=" + trashed + "]";
 	}
-	
-	
+
+	public RealtimeWeather getRealtimeWeather() {
+		return realtimeWeather;
+	}
+
+	public void setRealtimeWeather(RealtimeWeather realtimeWeather) {
+		this.realtimeWeather = realtimeWeather;
+	}
 	
 }
